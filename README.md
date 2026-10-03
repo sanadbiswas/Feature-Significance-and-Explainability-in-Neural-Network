@@ -235,7 +235,3 @@ Conference paper:
   doi       = {10.1109/ICMLA61862.2024.00170}
 }
 ```
-
-## Reproducibility
-
-Neural-network training is stochastic, so results may vary slightly across hardware, TensorFlow/CUDA versions, and random seeds. The implementation exposes `random_state` and uses the same architecture and training configuration for the observed and target-permuted models.
