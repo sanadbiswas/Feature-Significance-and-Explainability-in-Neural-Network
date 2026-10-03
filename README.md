@@ -26,10 +26,10 @@ Statistical significance is assessed as follows:
 The empirical p-value is
 
 $$
-p_j = \frac{\#\{b:\tau_j^{(b)} > \tau_j\}}{B},
+p_j = \frac{1}{B}\sum_{b=1}^{B} \mathbf{1}\left(\tau_j^{(b)} > \tau_j\right),
 $$
 
-where $B$ is the number of target permutations.
+where $B$ is the number of target permutations and $\mathbf{1}(\cdot)$ is the indicator function.
 
 ## Why target permutation?
 
