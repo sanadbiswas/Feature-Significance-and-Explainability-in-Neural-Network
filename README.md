@@ -4,7 +4,7 @@ Implementation of the target-permutation method presented in:
 
 > Biswas, S., Grundlingh, N., Boardman, J., White, J., & Le, L. (2025). **A Target Permutation Test for Statistical Significance of Feature Importance in Differentiable Models.** *Electronics, 14*(3), 571. https://doi.org/10.3390/electronics14030571
 
-An earlier conference version of this work appeared in:
+An earlier conference version appeared in:
 
 > Biswas, S., Grundlingh, N., Boardman, J., White, J., & Le, L. (2024). **Target Permutation for Feature Significance and Applications in Neural Networks.** *2024 International Conference on Machine Learning and Applications (ICMLA)*, 1115–1120. https://doi.org/10.1109/ICMLA61862.2024.00170
 
@@ -35,23 +35,12 @@ $$
 
 where $B$ is the number of target permutations and $\mathbf{1}(\cdot)$ is the indicator function.
 
-## Why target permutation?
-
-Permuting the target breaks the predictor-target relationship while preserving the predictor matrix and its correlation structure. This allows the significance of all input features to be evaluated simultaneously without permuting each predictor separately.
-
 ## Installation
 
 ```bash
 git clone https://github.com/sanadbiswas/Feature-Significance-and-Explainability-in-Neural-Network.git
 cd Feature-Significance-and-Explainability-in-Neural-Network
-pip install -e .
-```
-
-For development and testing:
-
-```bash
-pip install -e ".[dev]"
-pytest -q
+pip install -r requirements.txt
 ```
 
 ## Quick start
@@ -85,23 +74,16 @@ print(result.summary())
 print(result.significant_features(alpha=0.05))
 ```
 
-The summary contains one row per feature:
-
-```text
-feature    test_statistic    p_value
-X1         ...               ...
-X2         ...               ...
-...
-```
+The result summary contains one row per feature with its test statistic and empirical p-value.
 
 ## Run on a tabular dataset
 
-The real-data runner accepts a CSV file and supports regression, binary classification, and multiclass classification.
+The real-data script accepts a CSV file and supports regression, binary classification, and multiclass classification.
 
 Binary classification:
 
 ```bash
-python experiments/run_real_data_significance.py \
+python -m experiments.run_real_data_significance \
   --csv data.csv \
   --target outcome \
   --task binary \
@@ -111,7 +93,7 @@ python experiments/run_real_data_significance.py \
 Regression:
 
 ```bash
-python experiments/run_real_data_significance.py \
+python -m experiments.run_real_data_significance \
   --csv data.csv \
   --target response \
   --task regression \
@@ -143,7 +125,7 @@ $$
 Binary-classification versions of the linear and nonlinear settings are also included.
 
 ```bash
-python experiments/run_simulations.py --experiment core --permutations 100
+python -m experiments.run_simulations --experiment core --permutations 100
 ```
 
 ### Multicollinearity
@@ -151,7 +133,7 @@ python experiments/run_simulations.py --experiment core --permutations 100
 The multicollinearity experiments include correlated signal features and settings in which an irrelevant feature is correlated with the signal features.
 
 ```bash
-python experiments/run_simulations.py --experiment correlation --permutations 100
+python -m experiments.run_simulations --experiment correlation --permutations 100
 ```
 
 ### Effect strength
@@ -165,7 +147,7 @@ $$
 with $\beta$ ranging from 0.10 to 0.20.
 
 ```bash
-python experiments/run_simulations.py --experiment effect-strength --permutations 100
+python -m experiments.run_simulations --experiment effect-strength --permutations 100
 ```
 
 ### Number of permutations
@@ -173,7 +155,7 @@ python experiments/run_simulations.py --experiment effect-strength --permutation
 The permutation-count experiment evaluates regression and classification under both linear and nonlinear relationships for permutation counts from 100 to 1000.
 
 ```bash
-python experiments/run_simulations.py --experiment permutation-count
+python -m experiments.run_simulations --experiment permutation-count
 ```
 
 Because a neural network is fitted for each target permutation, large permutation counts can require substantial computation.
@@ -182,29 +164,28 @@ Because a neural network is fitted for each target permutation, large permutatio
 
 ```text
 .
-├── src/
-│   └── targetperm_nn/
-│       ├── __init__.py
-│       ├── models.py
-│       ├── significance.py
-│       └── simulation.py
+├── targetperm_nn/
+│   ├── __init__.py
+│   ├── models.py
+│   ├── significance.py
+│   └── simulation.py
 ├── experiments/
 │   ├── run_simulations.py
 │   └── run_real_data_significance.py
 ├── examples/
 │   └── basic_usage.py
-├── tests/
-│   └── test_significance.py
-├── .github/workflows/
-│   └── tests.yml
-├── pyproject.toml
+├── notebooks/
+│   ├── P_Value_heloc-data.ipynb
+│   ├── heloc_data_all.ipynb
+│   └── heloc_data_sig_10.ipynb
+├── README.md
 ├── requirements.txt
 └── CITATION.cff
 ```
 
-## Original notebooks
+## Notebooks
 
-The original HELOC notebooks used during the research project are retained in the repository for reference. The reusable implementation is provided in `src/targetperm_nn/`.
+The original HELOC notebooks used during the research project are available in the `notebooks/` directory. The reusable implementation is in `targetperm_nn/`.
 
 ## Citation
 
