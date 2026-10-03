@@ -12,7 +12,7 @@ from .models import NetworkConfig, Task, build_tabular_network, fit_network
 
 @dataclass
 class NeuralSignificanceResult:
-    """Results returned by the neural target-permutation test."""
+    """Results from the neural target-permutation test."""
 
     feature_names: list[str]
     observed_statistics: np.ndarray
@@ -34,7 +34,7 @@ class NeuralSignificanceResult:
         )
 
     def significant_features(self, alpha: float = 0.05) -> list[str]:
-        """Return features with empirical p-value at or below ``alpha``."""
+        """Return features with empirical p-values at or below ``alpha``."""
 
         if not 0 <= alpha <= 1:
             raise ValueError("alpha must be between 0 and 1.")
@@ -45,16 +45,14 @@ def mean_absolute_input_gradient(
     model: tf.keras.Model,
     X: np.ndarray,
 ) -> np.ndarray:
-    """Compute the paper's global feature test statistic.
+    """Compute the mean absolute input-gradient statistic for each feature.
 
-    For a scalar model output, this is the mean absolute input gradient
+    For a scalar output, the statistic is
 
         tau_j = mean_i |d y_hat_i / d x_ij|.
 
-    For a multiclass output, the same quantity is calculated for every output
-    class and averaged across classes so that each input feature has one global
-    statistic. This follows the paper's statement that multi-output settings can
-    be handled output by output.
+    For multiclass outputs, the statistic is computed for each output class and
+    then averaged across classes to obtain one value per input feature.
     """
 
     X_tensor = tf.convert_to_tensor(np.asarray(X, dtype=np.float32))
@@ -86,9 +84,11 @@ def empirical_p_values(
     observed_statistics: np.ndarray,
     null_statistics: np.ndarray,
 ) -> np.ndarray:
-    """Compute empirical p-values using the formula reported in the paper.
+    """Compute empirical p-values from observed and permuted statistics.
 
-    p_j = count(tau_j^(b) > tau_j) / B
+    For each feature,
+
+        p_j = count(tau_j^(b) > tau_j) / B,
 
     where B is the number of target permutations.
     """
@@ -109,10 +109,8 @@ def empirical_p_values(
 class NeuralTargetPermutationTest:
     """Target-permutation feature significance test for neural networks.
 
-    This class implements the experiment described in the published neural-network
-    paper. The feature matrix is kept fixed, the target is repeatedly permuted,
-    and the same neural-network architecture/training settings are used for the
-    observed and permuted datasets.
+    The feature matrix remains fixed while the target is repeatedly permuted.
+    Each model uses the same architecture and training configuration.
     """
 
     def __init__(
@@ -149,7 +147,7 @@ class NeuralTargetPermutationTest:
         y,
         feature_names: Iterable[str] | None = None,
     ) -> NeuralSignificanceResult:
-        """Fit the observed model and all target-permuted models."""
+        """Fit the observed model and the target-permuted models."""
 
         if isinstance(X, pd.DataFrame):
             inferred_names = list(X.columns)
