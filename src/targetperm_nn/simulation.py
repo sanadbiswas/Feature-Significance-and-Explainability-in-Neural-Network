@@ -18,6 +18,23 @@ def _frame(values: np.ndarray) -> pd.DataFrame:
     return pd.DataFrame(values, columns=[f"X{i + 1}" for i in range(values.shape[1])])
 
 
+def _nearest_correlation(matrix: np.ndarray) -> np.ndarray:
+    """Return a positive-semidefinite correlation matrix close to ``matrix``.
+
+    The paper's highest stated correlation setting can make the rounded covariance
+    specification numerically non-positive-semidefinite. Clipping tiny negative
+    eigenvalues keeps the simulation runnable while preserving the stated structure
+    as closely as possible.
+    """
+
+    symmetric = (matrix + matrix.T) / 2.0
+    eigenvalues, eigenvectors = np.linalg.eigh(symmetric)
+    eigenvalues = np.clip(eigenvalues, 1e-10, None)
+    psd = eigenvectors @ np.diag(eigenvalues) @ eigenvectors.T
+    scale = np.sqrt(np.diag(psd))
+    return psd / np.outer(scale, scale)
+
+
 def linear_regression(
     n_samples: int = 2000,
     random_state: int = 42,
@@ -105,6 +122,7 @@ def correlated_linear_regression(
                 [noise_correlation, noise_correlation, noise_correlation, 1.0],
             ]
         )
+        covariance = _nearest_correlation(covariance)
         correlated = rng.multivariate_normal(np.zeros(4), covariance, size=n_samples)
         X = np.column_stack([correlated, rng.normal(size=n_samples)])
     else:
@@ -139,6 +157,7 @@ def correlated_nonlinear_regression(
             [noise_correlation, noise_correlation, noise_correlation, 1.0],
         ]
     )
+    covariance = _nearest_correlation(covariance)
     correlated = rng.multivariate_normal(np.zeros(4), covariance, size=n_samples)
     X = np.column_stack([correlated, rng.normal(size=n_samples)])
     X[:, 1] = np.abs(X[:, 1]) + 1e-6
