@@ -19,13 +19,7 @@ def _frame(values: np.ndarray) -> pd.DataFrame:
 
 
 def _nearest_correlation(matrix: np.ndarray) -> np.ndarray:
-    """Return a positive-semidefinite correlation matrix close to ``matrix``.
-
-    The paper's highest stated correlation setting can make the rounded covariance
-    specification numerically non-positive-semidefinite. Clipping tiny negative
-    eigenvalues keeps the simulation runnable while preserving the stated structure
-    as closely as possible.
-    """
+    """Return a positive-semidefinite correlation matrix close to ``matrix``."""
 
     symmetric = (matrix + matrix.T) / 2.0
     eigenvalues, eigenvectors = np.linalg.eigh(symmetric)
@@ -39,7 +33,7 @@ def linear_regression(
     n_samples: int = 2000,
     random_state: int = 42,
 ) -> SimulationData:
-    """Paper simulation: independent features with a linear continuous target."""
+    """Generate independent predictors with a linear continuous target."""
 
     rng = np.random.default_rng(random_state)
     X = rng.normal(size=(n_samples, 5))
@@ -52,7 +46,7 @@ def nonlinear_regression(
     n_samples: int = 2000,
     random_state: int = 42,
 ) -> SimulationData:
-    """Paper simulation with polynomial, logarithmic, and periodic effects."""
+    """Generate a continuous target with polynomial, logarithmic, and periodic effects."""
 
     rng = np.random.default_rng(random_state)
     X = rng.normal(size=(n_samples, 5))
@@ -66,7 +60,7 @@ def linear_classification(
     n_samples: int = 2000,
     random_state: int = 42,
 ) -> SimulationData:
-    """Paper simulation: linear relationship with a binary target."""
+    """Generate a binary target from a linear predictor."""
 
     rng = np.random.default_rng(random_state)
     X = rng.normal(size=(n_samples, 5))
@@ -81,7 +75,7 @@ def nonlinear_classification(
     n_samples: int = 2000,
     random_state: int = 42,
 ) -> SimulationData:
-    """Paper binary simulation with polynomial, log, and sine relationships."""
+    """Generate a binary target with polynomial, logarithmic, and periodic effects."""
 
     rng = np.random.default_rng(random_state)
     X = rng.normal(size=(n_samples, 5))
@@ -104,11 +98,11 @@ def correlated_linear_regression(
     noise_correlation: float = 0.6,
     random_state: int = 42,
 ) -> SimulationData:
-    """Multicollinearity simulations used in Section 3.1.2 of the paper.
+    """Generate a linear regression setting with correlated predictors.
 
     X1-X3 have pairwise correlations 0.8, 0.6, and 0.7. When
     ``include_correlated_noise`` is true, X4 is also correlated with X1-X3 but
-    remains absent from the data-generating equation for y.
+    is not included in the target-generating equation.
     """
 
     rng = np.random.default_rng(random_state)
@@ -146,7 +140,7 @@ def correlated_nonlinear_regression(
     noise_correlation: float = 0.6,
     random_state: int = 42,
 ) -> SimulationData:
-    """Nonlinear multicollinearity scenario from Section 3.1.2."""
+    """Generate a nonlinear regression setting with correlated predictors."""
 
     rng = np.random.default_rng(random_state)
     covariance = np.array(
@@ -172,7 +166,7 @@ def correlated_noise_sweep(
     n_samples: int = 2000,
     random_state: int = 42,
 ) -> SimulationData:
-    """Section 3.1.3(a): vary correlation of irrelevant X4 with X1-X3."""
+    """Vary the correlation of irrelevant X4 with X1-X3."""
 
     if rho < 0.0 or rho > 0.9:
         raise ValueError("rho should be between 0.0 and 0.9 for this experiment.")
@@ -189,7 +183,7 @@ def dominant_signal_sweep(
     n_samples: int = 2000,
     random_state: int = 42,
 ) -> SimulationData:
-    """Section 3.1.3(b): X1 dominates correlated X2 and X3."""
+    """Generate correlated predictors with a dominant X1 effect."""
 
     rng = np.random.default_rng(random_state)
     covariance = np.array(
@@ -213,7 +207,7 @@ def get_permutation_stability_case(
     n_samples: int = 2000,
     random_state: int = 42,
 ) -> SimulationData:
-    """Return one of the four cases used in the permutation-count analysis."""
+    """Return a simulation case for the permutation-count analysis."""
 
     if task == "regression" and relationship == "linear":
         return linear_regression(n_samples, random_state)
