@@ -1,0 +1,35 @@
+cff-version: 1.2.0
+message: "If you use this code, please cite the published paper."
+title: "Target-Permutation Feature Significance for Neural Networks"
+type: software
+authors:
+  - family-names: Biswas
+    given-names: Sanad
+  - family-names: Grundlingh
+    given-names: Nina
+  - family-names: Boardman
+    given-names: Jonathan
+  - family-names: White
+    given-names: Joseph
+  - family-names: Le
+    given-names: Linh
+preferred-citation:
+  type: article
+  title: "A Target Permutation Test for Statistical Significance of Feature Importance in Differentiable Models"
+  authors:
+    - family-names: Biswas
+      given-names: Sanad
+    - family-names: Grundlingh
+      given-names: Nina
+    - family-names: Boardman
+      given-names: Jonathan
+    - family-names: White
+      given-names: Joseph
+    - family-names: Le
+      given-names: Linh
+  journal: Electronics
+  year: 2025
+  volume: 14
+  issue: 3
+  article-number: 571
+  doi: 10.3390/electronics14030571
