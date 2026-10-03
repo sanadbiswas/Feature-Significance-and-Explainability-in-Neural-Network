@@ -10,11 +10,7 @@ Task = Literal["regression", "binary", "multiclass"]
 
 @dataclass(frozen=True)
 class NetworkConfig:
-    """Configuration for the tabular neural network used in the permutation test.
-
-    The paper used shallow feed-forward neural networks for the significance test
-    to reduce the computational cost of repeatedly fitting permuted targets.
-    """
+    """Configuration for the feed-forward neural network."""
 
     hidden_units: Sequence[int] = (32, 16)
     activation: str = "relu"
@@ -34,20 +30,20 @@ def build_tabular_network(
     n_classes: int | None = None,
     seed: int = 42,
 ) -> tf.keras.Model:
-    """Build a feed-forward network for regression or classification.
+    """Build a feed-forward neural network for tabular data.
 
     Parameters
     ----------
     n_features:
-        Number of input columns.
+        Number of input features.
     task:
         ``"regression"``, ``"binary"``, or ``"multiclass"``.
     config:
-        Network architecture and optimization settings.
+        Network architecture and training settings.
     n_classes:
-        Required for multiclass classification.
+        Number of classes for multiclass classification.
     seed:
-        TensorFlow random seed used when creating the model.
+        TensorFlow random seed.
     """
 
     cfg = config or NetworkConfig()
@@ -92,11 +88,7 @@ def fit_network(
     y,
     config: NetworkConfig | None = None,
 ) -> tf.keras.callbacks.History:
-    """Fit a model using one fixed training configuration.
-
-    The same settings should be used for the observed-target model and every
-    target-permuted model, as required by the published procedure.
-    """
+    """Fit a neural network using the supplied training configuration."""
 
     cfg = config or NetworkConfig()
     callbacks = []
