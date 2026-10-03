@@ -4,7 +4,11 @@ Implementation of the target-permutation method presented in:
 
 > Biswas, S., Grundlingh, N., Boardman, J., White, J., & Le, L. (2025). **A Target Permutation Test for Statistical Significance of Feature Importance in Differentiable Models.** *Electronics, 14*(3), 571. https://doi.org/10.3390/electronics14030571
 
-This repository provides reusable code for neural-network feature significance testing, simulation experiments, and tabular-data applications based on the methodology described in the paper.
+An earlier conference version of this work appeared in:
+
+> Biswas, S., Grundlingh, N., Boardman, J., White, J., & Le, L. (2024). **Target Permutation for Feature Significance and Applications in Neural Networks.** *2024 International Conference on Machine Learning and Applications (ICMLA)*, 1115–1120. https://doi.org/10.1109/ICMLA61862.2024.00170
+
+This repository provides reusable code for neural-network feature significance testing, simulation experiments, and tabular-data applications based on the methodology described in these works.
 
 ## Method
 
@@ -204,7 +208,7 @@ The original HELOC notebooks used during the research project are retained in th
 
 ## Citation
 
-If you use this code, please cite:
+If you use this code, please cite the journal article:
 
 ```bibtex
 @article{biswas2025target,
@@ -216,6 +220,19 @@ If you use this code, please cite:
   pages   = {571},
   year    = {2025},
   doi     = {10.3390/electronics14030571}
+}
+```
+
+Conference paper:
+
+```bibtex
+@inproceedings{biswas2024target,
+  title     = {Target Permutation for Feature Significance and Applications in Neural Networks},
+  author    = {Biswas, Sanad and Grundlingh, Nina and Boardman, Jonathan and White, Joseph and Le, Linh},
+  booktitle = {2024 International Conference on Machine Learning and Applications (ICMLA)},
+  pages     = {1115--1120},
+  year      = {2024},
+  doi       = {10.1109/ICMLA61862.2024.00170}
 }
 ```
 
